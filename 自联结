@@ -1,0 +1,46 @@
+表 【Weather】
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| recordDate    | date    |
+| temperature   | int     |
++---------------+---------+
+id 是这个表的主键，该表包含特定日期的温度信息
+- 问题
+编一个 SQL 查询，来查找与之前（昨天的）日期相比温度更高的所有日期的 id 。
+返回结果 不要求顺序 。
+- 结果示例
+查询结果格式如下例：
+【Weather】
++----+------------+-------------+
+| id | recordDate | Temperature |
++----+------------+-------------+
+| 1  | 2015-01-01 | 10          |
+| 2  | 2015-01-02 | 25          |
+| 3  | 2015-01-03 | 20          |
+| 4  | 2015-01-04 | 30          |
++----+------------+-------------+
+【Result table】
++----+
+| id |
++----+
+| 2  |
+| 4  |
++----+
+2015-01-02 的温度比前一天高（10 -> 25）
+2015-01-04 的温度比前一天高（20 -> 30）
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/rising-temperature
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+- 思路
+1. 当自查询比较复杂的时候选用自联结。
+2. 题目要求在‘后一天和前一天’之间产生比较，则要限定比较的前提条件，即日期之间的差值=1
+   DATEDIFF(datepart,startdate,enddate) eg.SELECT DATEDIFF(day,'2008-12-29','2008-12-30') 计算出两个日期之间的差值
+3. 比较
+- 答案
+select w1.id as 'Id'
+from Weather as w1, Weather as w2
+Where Datediff(day,w1.recordDate,w2.recordDate)=1
+and w1.Temperature > w2.Temperature
